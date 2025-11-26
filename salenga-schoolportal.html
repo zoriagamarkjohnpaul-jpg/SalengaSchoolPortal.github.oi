@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --success: #4ade80;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Auth Section */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .auth-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .auth-left p {
+            font-size: 1.2rem;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .auth-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: white;
+        }
+
+        .auth-form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #22c55e;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.9rem;
+        }
+
+        .btn-link:hover {
+            color: var(--primary-dark);
+            background: none;
+        }
+
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Gender Selection */
+        .gender-selection {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .gender-option {
+            flex: 1;
+            text-align: center;
+        }
+
+        .gender-radio {
+            display: none;
+        }
+
+        .gender-label {
+            display: block;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .gender-radio:checked + .gender-label {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        /* Login Error Styles */
+        .login-error-message {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--danger);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Forgot Password Section */
+        .forgot-password-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .forgot-password-section.active {
+            display: block;
+        }
+
+        .forgot-password-section h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        /* Portal Section */
+        .hidden {
+            display: none;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            overflow: hidden;
+            object-fit: cover;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logout-btn {
+            background-color: var(--danger);
+            padding: 8px 15px;
+            width: auto;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc2626;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 0 20px;
+            background-color: white;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+        }
+
+        nav li.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+
+        nav li:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 30px 0;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: none;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--gray);
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-group {
+            margin-bottom: 15px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+        }
+
+        .edit-profile-btn {
+            margin-top: 20px;
+        }
+
+        /* Edit Profile Form */
+        .edit-profile-form {
+            display: none;
+        }
+
+        .edit-profile-form.active {
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Profile Picture Upload */
+        .profile-picture-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-picture-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .file-label:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .remove-picture-btn {
+            background-color: var(--danger);
+        }
+
+        .remove-picture-btn:hover {
+            background-color: #dc2626;
+        }
+
+        /* Schedule Table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th, .schedule-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .schedule-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .schedule-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Professors List */
+        .professor-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .professor-item:last-child {
+            border-bottom: none;
+        }
+
+        .professor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .professor-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .professor-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Grades Section */
+        .grades-section {
+            display: none;
+        }
+
+        .grades-section.active {
+            display: block;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grades-table th, .grades-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .grades-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .grades-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .grade {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 40px;
+        }
+
+        .grade-a {
+            background-color: rgba(74, 222, 128, 0.2);
+            color: #16a34a;
+        }
+
+        .grade-b {
+            background-color: rgba(96, 165, 250, 0.2);
+            color: #2563eb;
+        }
+
+        .grade-c {
+            background-color: rgba(251, 191, 36, 0.2);
+            color: #d97706;
+        }
+
+        .grade-d {
+            background-color: rgba(248, 113, 113, 0.2);
+            color: #dc2626;
+        }
+
+        .grade-f {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #b91c1c;
+        }
+
+        .gpa-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .gpa-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Year Tabs for Grades */
+        .year-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .year-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+
+        .year-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .year-tab:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        /* Success Message */
+        .success-message {
+            background-color: rgba(74, 222, 128, 0.1);
+            color: var(--success);
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+            }
+            
+            .auth-left {
+                padding: 30px 20px;
+            }
+            
+            .auth-tabs {
+                flex-direction: column;
+            }
+            
+            .auth-tab {
+                text-align: center;
+            }
+            
+            .gender-selection {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .schedule-table, .grades-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .year-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .upload-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-left">
+            <h1>School Portal</h1>
+            <p>Access your class schedule, professors, grades, and academic information all in one place.</p>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Log In</div>
+                    <div class="auth-tab" data-tab="signup">Create Account</div>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active">
+                    <div class="form-group">
+                        <label for="loginEmail">Student Email</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your student email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block">Log In</button>
+                    </div>
+                    <div class="form-footer">
+                        <button type="button" id="forgotPasswordBtn" class="btn-link">Forgot Password?</button>
+                    </div>
+                </form>
+                
+                <!-- Forgot Password Section -->
+                <div id="forgotPasswordSection" class="forgot-password-section">
+                    <h3>Reset Your Password</h3>
+                    <div class="form-group">
+                        <label for="forgotEmail">Student Email</label>
+                        <input type="email" id="forgotEmail" class="form-control" placeholder="Enter your student email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" class="form-control" placeholder="Enter your new password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your new password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="resetPasswordBtn" class="btn btn-warning btn-block">Reset Password</button>
+                    </div>
+                    <div class="form-footer">
+                        <button type="button" id="backToLoginBtn" class="btn-link">Back to Login</button>
+                    </div>
+                </div>
+                
+                <!-- Sign Up Form -->
+                <form id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="signupEmail">Student Email</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your student email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" class="form-control" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" class="form-control" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="gender-selection">
+                            <div class="gender-option">
+                                <input type="radio" id="male" name="gender" value="male" class="gender-radio" required>
+                                <label for="male" class="gender-label">Male</label>
+                            </div>
+                            <div class="gender-option">
+                                <input type="radio" id="female" name="gender" value="female" class="gender-radio" required>
+                                <label for="female" class="gender-label">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input type="text" id="studentId" class="form-control" placeholder="Your student ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearOfStudy">Year of Study</label>
+                        <select id="yearOfStudy" class="form-control" required>
+                            <option value="">Select your year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" class="form-control" placeholder="Your address">
+                    </div>
+                    <div class="form-group">
+                        <label for="major">Major/Program</label>
+                        <input type="text" id="major" class="form-control" placeholder="Your major or program">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portal Section (Initially Hidden) -->
+    <div id="portalSection" class="hidden">
+        <!-- Header Section -->
+        <header>
+            <div class="top-bar">
+                <div class="logo">
+                    <h1>School Portal</h1>
+                </div>
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">JS</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userNameDisplay">John Smith</div>
+                        <div class="user-role">Student</div>
+                    </div>
+                    <button id="logoutBtn" class="btn logout-btn">Log Out</button>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-section="dashboard">Dashboard</li>
+                    <li data-section="grades">My Grades</li>
+                    <li data-section="profile">My Profile</li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="container">
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="dashboard">
+                <!-- Welcome Card -->
+                <div class="welcome-card">
+                    <h2 id="welcomeMessage">Welcome back, John!</h2>
+                    <p>Check your class schedule and professor information below.</p>
+                </div>
+
+                <!-- Schedule -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Weekly Class Schedule</h3>
+                        <div class="card-icon">
+                            📅
+                        </div>
+                    </div>
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>8:00 - 9:30 AM</td>
+                                <td>Elective 3<br><small>Room 201</small></td>
+                                <td>PROF 103<br><small>Room 305</small></td>
+                                <td>Elective 3<br><small>Room 201</small></td>
+                                <td>PROF 103<br><small>Room 305</small></td>
+                                <td>SIA101<br><small>Lab 3</small></td>
+                            </tr>
+                            <tr>
+                                <td>10:00 - 11:30 AM</td>
+                                <td>SIA101<br><small>Lab 3</small></td>
+                                <td>Elective 3<br><small>Room 201</small></td>
+                                <td>SIA101<br><small>Lab 3</small></td>
+                                <td>Elective 3<br><small>Room 201</small></td>
+                                <td>PROF 103<br><small>Room 305</small></td>
+                            </tr>
+                            <tr>
+                                <td>1:00 - 2:30 PM</td>
+                                <td>PROF 103<br><small>Room 305</small></td>
+                                <td>SIA101<br><small>Lab 3</small></td>
+                                <td>PROF 103<br><small>Room 305</small></td>
+                                <td>SIA101<br><small>Lab 3</small></td>
+                                <td>Elective 3<br><small>Room 201</small></td>
+                            </tr>
+                            <tr>
+                                <td>3:00 - 4:30 PM</td>
+                                <td>MS102<br><small>Room 215</small></td>
+                                <td>MS102<br><small>Room 215</small></td>
+                                <td>MS102<br><small>Room 215</small></td>
+                                <td>MS102<br><small>Room 215</small></td>
+                                <td>MS102<br><small>Room 215</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Professors -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Professors</h3>
+                        <div class="card-icon">
+                            👨‍🏫
+                        </div>
+                    </div>
+                    <div class="professor-item">
+                        <div class="professor-avatar">SF</div>
+                        <div class="professor-info">
+                            <h3>Sharra Mae Fernandez</h3>
+                            <p>Elective 3 • Room 201</p>
+                            <p>Email: s.fernandez@school.edu</p>
+                        </div>
+                    </div>
+                    <div class="professor-item">
+                        <div class="professor-avatar">HA</div>
+                        <div class="professor-info">
+                            <h3>Herman Acla</h3>
+                            <p>PROF 103 • Room 305</p>
+                            <p>Email: h.acla@school.edu</p>
+                        </div>
+                    </div>
+                    <div class="professor-item">
+                        <div class="professor-avatar">FV</div>
+                        <div class="professor-info">
+                            <h3>Felipe Vista IV</h3>
+                            <p>SIA101 • Lab 3</p>
+                            <p>MS102 • Room 215</p>
+                            <p>Email: f.vista@school.edu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades Section -->
+            <div id="gradesSection" class="grades-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">My Grades</h3>
+                        <div class="card-icon">
+                            📊
+                        </div>
+                    </div>
+                    
+                    <!-- Year Tabs -->
+                    <div class="year-tabs" id="yearTabs">
+                        <div class="year-tab active" data-year="1">1st Year</div>
+                        <div class="year-tab" data-year="2">2nd Year</div>
+                        <div class="year-tab" data-year="3">3rd Year</div>
+                        <div class="year-tab" data-year="4">4th Year</div>
+                    </div>
+                    
+                    <table class="grades-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Professor</th>
+                                <th>Midterm Grade</th>
+                                <th>Final Grade</th>
+                                <th>Overall Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradesTableBody">
+                            <!-- Grades will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    <div class="gpa-display">
+                        <div>
+                            <div class="detail-label">Current GPA</div>
+                            <div class="gpa-value" id="gpaValue">0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profileSection" class="profile-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">My Profile</h3>
+                        <div class="card-icon">
+                            👤
+                        </div>
+                    </div>
+                    
+                    <!-- Profile View -->
+                    <div id="profileView">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="profileAvatar">JS</div>
+                            <div class="profile-info">
+                                <h2 id="profileName">John Smith</h2>
+                                <p id="profileRole">Student</p>
+                                <p id="profileEmail">john.smith@student.edu</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Student ID</div>
+                                    <div class="detail-value" id="profileStudentId">S-2023-12345</div>
+                                </div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Gender</div>
+                                    <div class="detail-value" id="profileGender">Male</div>
+                                </div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Year of Study</div>
+                                    <div class="detail-value" id="profileYearOfStudy">3rd Year</div>
+                                </div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Phone</div>
+                                    <div class="detail-value" id="profilePhone">(123) 456-7890</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Address</div>
+                                    <div class="detail-value" id="profileAddress">123 Main St, Anytown, USA</div>
+                                </div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Major</div>
+                                    <div class="detail-value" id="profileMajor">Computer Science</div>
+                                </div>
+                                <div class="detail-group">
+                                    <div class="detail-label">Account Created</div>
+                                    <div class="detail-value" id="profileCreated">October 15, 2023</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="editProfileBtn" class="btn edit-profile-btn">Edit Profile</button>
+                    </div>
+                    
+                    <!-- Edit Profile Form -->
+                    <form id="editProfileForm" class="edit-profile-form">
+                        <!-- Profile Picture Upload Section -->
+                        <div class="profile-picture-upload">
+                            <div class="profile-picture-preview" id="profilePicturePreview">
+                                <!-- Profile picture will be displayed here -->
+                            </div>
+                            <div class="upload-controls">
+                                <input type="file" id="profilePictureInput" class="file-input" accept="image/*">
+                                <label for="profilePictureInput" class="file-label">Upload Photo</label>
+                                <button type="button" id="removePictureBtn" class="btn btn-danger remove-picture-btn">Remove Photo</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editFirstName">First Name</label>
+                                <input type="text" id="editFirstName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLastName">Last Name</label>
+                                <input type="text" id="editLastName" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="gender-selection">
+                                <div class="gender-option">
+                                    <input type="radio" id="editMale" name="editGender" value="male" class="gender-radio" required>
+                                    <label for="editMale" class="gender-label">Male</label>
+                                </div>
+                                <div class="gender-option">
+                                    <input type="radio" id="editFemale" name="editGender" value="female" class="gender-radio" required>
+                                    <label for="editFemale" class="gender-label">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editYearOfStudy">Year of Study</label>
+                            <select id="editYearOfStudy" class="form-control" required>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPhone">Phone Number</label>
+                            <input type="tel" id="editPhone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAddress">Address</label>
+                            <input type="text" id="editAddress" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editMajor">Major/Program</label>
+                            <input type="text" id="editMajor" class="form-control">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const authSection = document.getElementById('authSection');
+        const portalSection = document.getElementById('portalSection');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const userAvatar = document.getElementById('userAvatar');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        
+        // Forgot Password Elements
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+        const backToLoginBtn = document.getElementById('backToLoginBtn');
+        const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+        const forgotEmailInput = document.getElementById('forgotEmail');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        
+        // Profile Elements
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileStudentId = document.getElementById('profileStudentId');
+        const profileGender = document.getElementById('profileGender');
+        const profileYearOfStudy = document.getElementById('profileYearOfStudy');
+        const profilePhone = document.getElementById('profilePhone');
+        const profileAddress = document.getElementById('profileAddress');
+        const profileMajor = document.getElementById('profileMajor');
+        const profileCreated = document.getElementById('profileCreated');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        
+        // Profile Picture Elements
+        const profilePictureInput = document.getElementById('profilePictureInput');
+        const profilePicturePreview = document.getElementById('profilePicturePreview');
+        const removePictureBtn = document.getElementById('removePictureBtn');
+        
+        // Navigation
+        const navItems = document.querySelectorAll('nav li');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const profileSection = document.getElementById('profileSection');
+        const gradesSection = document.getElementById('gradesSection');
+        
+        // Form Elements
+        const editFirstName = document.getElementById('editFirstName');
+        const editLastName = document.getElementById('editLastName');
+        const editYearOfStudy = document.getElementById('editYearOfStudy');
+        const editPhone = document.getElementById('editPhone');
+        const editAddress = document.getElementById('editAddress');
+        const editMajor = document.getElementById('editMajor');
+
+        // Grades Elements
+        const yearTabs = document.getElementById('yearTabs');
+        const gradesTableBody = document.getElementById('gradesTableBody');
+        const gpaValue = document.getElementById('gpaValue');
+
+        // Student accounts storage
+        let studentAccounts = JSON.parse(localStorage.getItem('studentAccounts')) || {
+            'demo@student.edu': { 
+                password: 'demo123', 
+                firstName: 'Demo', 
+                lastName: 'User',
+                gender: 'male',
+                studentId: 'S-2023-001',
+                yearOfStudy: '3',
+                phone: '(555) 123-4567',
+                address: '123 Demo Street, City, State',
+                major: 'Computer Science',
+                created: new Date().toISOString(),
+                profilePicture: null, // Added profile picture field
+                grades: {
+                    '1': [
+                        { code: 'CC 102', name: 'Computer Programming 1', professor: 'Prof. Ronaida Wenceslao', midterm: 85, final: 88, overall: 87 },
+                        { code: 'HCI 101', name: 'Intro to Human Computer Interaction', professor: 'Prof. Sharra Mae Fernandez', midterm: 78, final: 82, overall: 80 },
+                        { code: 'GE 1', name: 'Understanding  The Self', professor: 'Prof. Davis', midterm: 92, final: 90, overall: 91 },
+                        { code: 'GE_5', name: 'Purposive Communication', professor: 'Prof. Bacos', midterm: 90, final: 91, overall: 95 }
+                    ],
+                    '2': [
+                        { code: 'MATH202', name: 'Calculus II', professor: 'Prof. Saul', midterm: 82, final: 85, overall: 84 },
+                        { code: 'PHYS202', name: 'Physics II', professor: 'Prof. Achas', midterm: 79, final: 81, overall: 80 },
+                        { code: 'CS101', name: 'Intro to Programming', professor: 'Prof. Wilson', midterm: 88, final: 92, overall: 90 }
+                    ],
+                    '3': [
+                        { code: 'ELECTIVE3', name: 'Elective 3', professor: 'Sharra Mae Fernandez', midterm: 85, final: 88, overall: 87 },
+                        { code: 'PROF103', name: 'PROF 103', professor: 'Herman Acla', midterm: 82, final: 85, overall: 84 },
+                        { code: 'SIA101', name: 'SIA101', professor: 'Felipe Vista IV', midterm: 88, final: 90, overall: 89 },
+                        { code: 'MS102', name: 'Mathematics', professor: 'Felipe Vista IV', midterm: 79, final: 83, overall: 81 }
+                    ],
+                     '4': [
+                        { code: 'ELECTIVE3', name: 'Elective 3', professor: 'Sharra Mae Fernandez', midterm: 85, final: 88, overall: 87 },
+                        { code: 'PROF103', name: 'PROF 103', professor: 'Herman Acla', midterm: 82, final: 85, overall: 84 },
+                        { code: 'SIA101', name: 'SIA101', professor: 'Felipe Vista IV', midterm: 88, final: 90, overall: 89 },
+                        { code: 'MS102', name: 'Mathematics', professor: 'Felipe Vista IV', midterm: 79, final: 83, overall: 81 }
+                    ]
+                }
+            }
+        };
+
+        // Current user
+        let currentUser = null;
+        let currentYearTab = '1'; // Default to 1st Year
+
+        // College grading system
+        const gradeScale = {
+            'A': { min: 90, max: 100, points: 4.0 },
+            'B+': { min: 85, max: 89, points: 3.5 },
+            'B': { min: 80, max: 84, points: 3.0 },
+            'C+': { min: 75, max: 79, points: 2.5 },
+            'C': { min: 70, max: 74, points: 2.0 },
+            'D': { min: 60, max: 69, points: 1.0 },
+            'F': { min: 0, max: 59, points: 0.0 }
+        };
+
+        // Forgot Password functionality
+        forgotPasswordBtn.addEventListener('click', function() {
+            loginForm.style.display = 'none';
+            forgotPasswordSection.classList.add('active');
+        });
+
+        backToLoginBtn.addEventListener('click', function() {
+            forgotPasswordSection.classList.remove('active');
+            loginForm.style.display = 'block';
+            clearForgotPasswordForm();
+        });
+
+        resetPasswordBtn.addEventListener('click', function() {
+            const email = forgotEmailInput.value.toLowerCase().trim();
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Clear previous errors
+            clearForgotPasswordErrors();
+
+            // Validation
+            if (!email) {
+                showForgotPasswordError('Please enter your email address');
+                return;
+            }
+
+            if (!newPassword || !confirmPassword) {
+                showForgotPasswordError('Please fill in all fields');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showForgotPasswordError('New passwords do not match');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showForgotPasswordError('New password must be at least 6 characters long');
+                return;
+            }
+
+            // Check if user exists
+            if (!studentAccounts[email]) {
+                showForgotPasswordError('No account found with this email');
+                return;
+            }
+
+            // Update password
+            studentAccounts[email].password = newPassword;
+            localStorage.setItem('studentAccounts', JSON.stringify(studentAccounts));
+
+            // Show success message and return to login
+            showForgotPasswordSuccess('Password reset successfully! You can now log in with your new password.');
+            
+            setTimeout(() => {
+                forgotPasswordSection.classList.remove('active');
+                loginForm.style.display = 'block';
+                clearForgotPasswordForm();
+                clearForgotPasswordErrors();
+            }, 2000);
+        });
+
+        function showForgotPasswordError(message) {
+            clearForgotPasswordErrors();
+            const errorElement = document.createElement('div');
+            errorElement.className = 'login-error-message';
+            errorElement.textContent = message;
+            forgotPasswordSection.insertBefore(errorElement, forgotPasswordSection.firstChild);
+        }
+
+        function showForgotPasswordSuccess(message) {
+            clearForgotPasswordErrors();
+            const successElement = document.createElement('div');
+            successElement.className = 'success-message';
+            successElement.textContent = message;
+            forgotPasswordSection.insertBefore(successElement, forgotPasswordSection.firstChild);
+        }
+
+        function clearForgotPasswordErrors() {
+            const existingErrors = forgotPasswordSection.querySelectorAll('.login-error-message, .success-message');
+            existingErrors.forEach(error => error.remove());
+        }
+
+        function clearForgotPasswordForm() {
+            forgotEmailInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+        }
+
+        // Year tabs functionality for grades
+        document.querySelectorAll('.year-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Display grades for selected year
+                currentYearTab = tab.getAttribute('data-year');
+                displayGradesForYear(currentYearTab);
+            });
+        });
+
+        // Toggle between login and signup forms
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding form
+                if (targetTab === 'login') {
+                    loginForm.classList.add('active');
+                    signupForm.classList.remove('active');
+                    forgotPasswordSection.classList.remove('active');
+                    loginForm.style.display = 'block';
+                } else {
+                    loginForm.classList.remove('active');
+                    signupForm.classList.add('active');
+                    forgotPasswordSection.classList.remove('active');
+                }
+            });
+        });
+
+        // Navigation between sections
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetSection = item.getAttribute('data-section');
+                
+                // Update active nav item
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Show corresponding section
+                if (targetSection === 'dashboard') {
+                    dashboardSection.style.display = 'block';
+                    profileSection.classList.remove('active');
+                    gradesSection.classList.remove('active');
+                } else if (targetSection === 'profile') {
+                    dashboardSection.style.display = 'none';
+                    profileSection.classList.add('active');
+                    gradesSection.classList.remove('active');
+                } else if (targetSection === 'grades') {
+                    dashboardSection.style.display = 'none';
+                    profileSection.classList.remove('active');
+                    gradesSection.classList.add('active');
+                    displayGradesForYear(currentYearTab);
+                }
+            });
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.toLowerCase().trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Clear previous errors
+            clearLoginErrors();
+            
+            // Simple validation
+            if (!email || !password) {
+                showLoginError('Please fill in all fields');
+                return;
+            }
+            
+            // Check if user exists
+            if (!studentAccounts[email]) {
+                showLoginError('No account found with this email.');
+                return;
+            }
+            
+            // Check password
+            if (password !== studentAccounts[email].password) {
+                showLoginError('Wrong password. Please try again.');
+                return;
+            }
+            
+            // If authentication is successful
+            loginSuccess(email, studentAccounts[email]);
+        });
+
+        // Function to show login errors
+        function showLoginError(message) {
+            // Remove any existing error messages
+            clearLoginErrors();
+            
+            // Create error message element
+            const errorElement = document.createElement('div');
+            errorElement.className = 'login-error-message';
+            errorElement.textContent = message;
+            
+            // Insert error message before the submit button
+            const submitButton = loginForm.querySelector('.btn');
+            loginForm.insertBefore(errorElement, submitButton);
+        }
+
+        // Function to clear login errors
+        function clearLoginErrors() {
+            const existingErrors = document.querySelectorAll('.login-error-message');
+            existingErrors.forEach(error => error.remove());
+        }
+
+        // Function to handle successful login
+        function loginSuccess(email, userData) {
+            currentUser = email;
+            
+            const displayName = `${userData.firstName} ${userData.lastName}`;
+            
+            // Update UI with user info
+            userNameDisplay.textContent = displayName;
+            
+            // Update avatar with profile picture or initials
+            updateAvatar(userAvatar, userData);
+            
+            welcomeMessage.textContent = `Welcome back, ${userData.firstName}!`;
+            
+            // Update profile information
+            updateProfileDisplay(userData);
+            
+            // Switch to portal view
+            authSection.classList.add('hidden');
+            portalSection.classList.remove('hidden');
+            
+            // Reset form
+            loginForm.reset();
+            clearLoginErrors();
+        }
+
+        // Update avatar with profile picture or initials
+        function updateAvatar(avatarElement, userData) {
+            if (userData.profilePicture) {
+                avatarElement.innerHTML = `<img src="${userData.profilePicture}" alt="${userData.firstName} ${userData.lastName}">`;
+            } else {
+                avatarElement.textContent = userData.firstName.charAt(0).toUpperCase() + userData.lastName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Update profile display with user data
+        function updateProfileDisplay(userData) {
+            const displayName = `${userData.firstName} ${userData.lastName}`;
+            profileName.textContent = displayName;
+            profileEmail.textContent = currentUser;
+            
+            // Update profile avatar with picture or initials
+            updateAvatar(profileAvatar, userData);
+            
+            profileStudentId.textContent = userData.studentId || 'Not provided';
+            
+            // Format gender
+            profileGender.textContent = userData.gender ? 
+                userData.gender.charAt(0).toUpperCase() + userData.gender.slice(1) : 'Not provided';
+            
+            // Format year of study
+            const yearText = userData.yearOfStudy ? 
+                `${getOrdinalSuffix(userData.yearOfStudy)} Year` : 'Not provided';
+            profileYearOfStudy.textContent = yearText;
+            
+            profilePhone.textContent = userData.phone || 'Not provided';
+            profileAddress.textContent = userData.address || 'Not provided';
+            profileMajor.textContent = userData.major || 'Not declared';
+            
+            // Format creation date
+            if (userData.created) {
+                const createdDate = new Date(userData.created);
+                profileCreated.textContent = createdDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } else {
+                profileCreated.textContent = 'Unknown';
+            }
+        }
+
+        // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
+        function getOrdinalSuffix(year) {
+            if (year === '1') return '1st';
+            if (year === '2') return '2nd';
+            if (year === '3') return '3rd';
+            if (year === '4') return '4th';
+            return `${year}th`;
+        }
+
+        // Handle signup form submission
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value.toLowerCase().trim();
+            const password = document.getElementById('signupPassword').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+            const studentId = document.getElementById('studentId').value;
+            const yearOfStudy = document.getElementById('yearOfStudy').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const major = document.getElementById('major').value;
+            
+            // Simple validation
+            if (!email || !password || !firstName || !lastName || !gender || !studentId || !yearOfStudy) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Check if email already exists
+            if (studentAccounts[email]) {
+                alert('An account with this email already exists. Please log in instead.');
+                return;
+            }
+            
+            // Generate grades for previous years
+            const grades = generateGradesForAllYears(yearOfStudy);
+            
+            // Create new account
+            studentAccounts[email] = {
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender,
+                studentId: studentId,
+                yearOfStudy: yearOfStudy,
+                phone: phone,
+                address: address,
+                major: major,
+                created: new Date().toISOString(),
+                profilePicture: null, // Initialize with no profile picture
+                grades: grades
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('studentAccounts', JSON.stringify(studentAccounts));
+            
+            // Set as current user and log in
+            currentUser = email;
+            loginSuccess(email, studentAccounts[email]);
+            
+            // Reset form and switch to login tab
+            signupForm.reset();
+        });
+
+        // Generate grades for all completed years
+        function generateGradesForAllYears(currentYear) {
+            const grades = {};
+            const currentYearNum = parseInt(currentYear);
+            
+            // Generate grades for each completed year
+            for (let year = 1; year <= currentYearNum; year++) {
+                grades[year] = generateYearGrades(year);
+            }
+            
+            return grades;
+        }
+
+        // Generate random grades for a specific year
+        function generateYearGrades(year) {
+            const subjectsByYear = {
+                1: [
+                    { code: 'CC 102', name: 'Computer Programming 1', professor: 'Prof. Ronaida Wenceslao' },
+                    { code: 'HCI 101', name: 'Intro to Human Computer Interaction', professor: 'Prof. Sharra Mae Fernandez' },
+                    { code: 'GE 1', name: 'Understanding The Self', professor: 'Prof. Davis' },
+                    { code: 'GE_5', name: 'Purposive Communication', professor: 'Prof. Bacos' }
+                ],
+                2: [
+                    { code: 'MATH202', name: 'Calculus II', professor: 'Prof. Saul' },
+                    { code: 'PHYS202', name: 'Physics II', professor: 'Prof. Achas' },
+                    { code: 'CS101', name: 'Intro to Programming', professor: 'Prof. Wilson' },
+                ],
+                3: [
+                    { code: 'ELECTIVE3', name: 'Elective 3', professor: 'Sharra Mae Fernandez' },
+                    { code: 'PROF103', name: 'PROF 103', professor: 'Herman Acla' },
+                    { code: 'SIA101', name: 'SIA101', professor: 'Felipe Vista IV' },
+                    { code: 'MS102', name: 'Mathematics', professor: 'Felipe Vista IV' }
+                ],
+                4: [
+                    { code: 'CS401', name: 'Advanced Algorithms', professor: 'Dr. Lee' },
+                    { code: 'CS402', name: 'Database Systems', professor: 'Prof. Garcia' },
+                    { code: 'CS403', name: 'Software Engineering', professor: 'Dr. Martinez' },
+                    { code: 'ELECTIVE4', name: 'Technical Elective', professor: 'Prof. Anderson' }
+                ],
+            };
+            
+            const subjects = subjectsByYear[year] || [];
+            const yearGrades = [];
+            
+            subjects.forEach(subject => {
+                // Generate random scores (0-100)
+                const midtermScore = Math.floor(Math.random() * 41) + 60; // 60-100
+                const finalScore = Math.floor(Math.random() * 41) + 60; // 60-100
+                
+                // Calculate overall score (weighted: 40% midterm, 60% final)
+                const overallScore = Math.round((midtermScore * 0.4) + (finalScore * 0.6));
+                
+                yearGrades.push({
+                    code: subject.code,
+                    name: subject.name,
+                    professor: subject.professor,
+                    midterm: midtermScore,
+                    final: finalScore,
+                    overall: overallScore
+                });
+            });
+            
+            return yearGrades;
+        }
+
+        // Display grades for a specific year
+        function displayGradesForYear(year) {
+            gradesTableBody.innerHTML = '';
+            const userData = studentAccounts[currentUser];
+            const yearGrades = userData.grades && userData.grades[year] ? userData.grades[year] : [];
+            let totalPoints = 0;
+            let totalSubjects = 0;
+            
+            if (yearGrades.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="5" style="text-align: center; color: var(--gray);">No grades available for ${getOrdinalSuffix(year)} Year</td>`;
+                gradesTableBody.appendChild(row);
+                gpaValue.textContent = '0.00';
+                return;
+            }
+            
+            yearGrades.forEach(grade => {
+                // Convert scores to letter grades
+                const midtermGrade = getLetterGrade(grade.midterm);
+                const finalGrade = getLetterGrade(grade.final);
+                const overallGrade = getLetterGrade(grade.overall);
+                
+                // Add to GPA calculation
+                totalPoints += gradeScale[overallGrade].points;
+                totalSubjects++;
+                
+                // Create table row
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${grade.name} (${grade.code})</td>
+                    <td>${grade.professor}</td>
+                    <td><span class="grade grade-${getGradeClass(midtermGrade)}">${midtermGrade}</span> (${grade.midterm})</td>
+                    <td><span class="grade grade-${getGradeClass(finalGrade)}">${finalGrade}</span> (${grade.final})</td>
+                    <td><span class="grade grade-${getGradeClass(overallGrade)}">${overallGrade}</span> (${grade.overall})</td>
+                `;
+                gradesTableBody.appendChild(row);
+            });
+            
+            // Calculate and display GPA
+            const gpa = totalPoints / totalSubjects;
+            gpaValue.textContent = gpa.toFixed(2);
+        }
+
+        // Convert numerical score to letter grade
+        function getLetterGrade(score) {
+            for (const [grade, range] of Object.entries(gradeScale)) {
+                if (score >= range.min && score <= range.max) {
+                    return grade;
+                }
+            }
+            return 'F';
+        }
+
+        // Get CSS class for grade display
+        function getGradeClass(grade) {
+            switch(grade) {
+                case 'A': return 'a';
+                case 'B+': return 'b';
+                case 'B': return 'b';
+                case 'C+': return 'c';
+                case 'C': return 'c';
+                case 'D': return 'd';
+                case 'F': return 'f';
+                default: return 'f';
+            }
+        }
+
+        // Edit profile button click
+        editProfileBtn.addEventListener('click', function() {
+            // Populate form with current data
+            const userData = studentAccounts[currentUser];
+            editFirstName.value = userData.firstName;
+            editLastName.value = userData.lastName;
+            
+            // Set gender radio button
+            document.querySelectorAll('input[name="editGender"]').forEach(radio => {
+                radio.checked = radio.value === userData.gender;
+            });
+            
+            editYearOfStudy.value = userData.yearOfStudy || '1';
+            editPhone.value = userData.phone || '';
+            editAddress.value = userData.address || '';
+            editMajor.value = userData.major || '';
+            
+            // Update profile picture preview
+            updateProfilePicturePreview(userData);
+            
+            // Show edit form, hide profile view
+            document.getElementById('profileView').style.display = 'none';
+            editProfileForm.classList.add('active');
+        });
+
+        // Update profile picture preview
+        function updateProfilePicturePreview(userData) {
+            profilePicturePreview.innerHTML = '';
+            
+            if (userData.profilePicture) {
+                const img = document.createElement('img');
+                img.src = userData.profilePicture;
+                img.alt = `${userData.firstName} ${userData.lastName}`;
+                profilePicturePreview.appendChild(img);
+            } else {
+                profilePicturePreview.textContent = userData.firstName.charAt(0).toUpperCase() + userData.lastName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Cancel edit button click
+        cancelEditBtn.addEventListener('click', function() {
+            // Show profile view, hide edit form
+            document.getElementById('profileView').style.display = 'block';
+            editProfileForm.classList.remove('active');
+        });
+
+        // Handle profile picture upload
+        profilePictureInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check if file is an image
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file');
+                return;
+            }
+            
+            // Check file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Please select an image smaller than 2MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update profile picture preview
+                profilePicturePreview.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = 'Profile Picture';
+                profilePicturePreview.appendChild(img);
+                
+                // Store the image data in a temporary variable
+                profilePicturePreview.dataset.tempImage = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Handle remove picture button
+        removePictureBtn.addEventListener('click', function() {
+            // Clear profile picture preview
+            const userData = studentAccounts[currentUser];
+            profilePicturePreview.innerHTML = '';
+            profilePicturePreview.textContent = userData.firstName.charAt(0).toUpperCase() + userData.lastName.charAt(0).toUpperCase();
+            
+            // Clear temporary image data
+            delete profilePicturePreview.dataset.tempImage;
+        });
+
+        // Handle edit profile form submission
+        editProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Update user data
+            studentAccounts[currentUser].firstName = editFirstName.value;
+            studentAccounts[currentUser].lastName = editLastName.value;
+            studentAccounts[currentUser].gender = document.querySelector('input[name="editGender"]:checked').value;
+            studentAccounts[currentUser].yearOfStudy = editYearOfStudy.value;
+            studentAccounts[currentUser].phone = editPhone.value;
+            studentAccounts[currentUser].address = editAddress.value;
+            studentAccounts[currentUser].major = editMajor.value;
+            
+            // Update profile picture if a new one was selected
+            if (profilePicturePreview.dataset.tempImage) {
+                studentAccounts[currentUser].profilePicture = profilePicturePreview.dataset.tempImage;
+            }
+            
+            // If year of study changed, update grades
+            const oldYear = studentAccounts[currentUser].yearOfStudy;
+            const newYear = editYearOfStudy.value;
+            
+            if (oldYear !== newYear) {
+                // Generate grades for new year if needed
+                if (!studentAccounts[currentUser].grades[newYear]) {
+                    studentAccounts[currentUser].grades[newYear] = generateYearGrades(newYear);
+                }
+                
+                // Update year tabs if needed
+                updateYearTabs(newYear);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('studentAccounts', JSON.stringify(studentAccounts));
+            
+            // Update UI
+            updateProfileDisplay(studentAccounts[currentUser]);
+            userNameDisplay.textContent = `${editFirstName.value} ${editLastName.value}`;
+            
+            // Update avatar with profile picture or initials
+            updateAvatar(userAvatar, studentAccounts[currentUser]);
+            
+            welcomeMessage.textContent = `Welcome back, ${editFirstName.value}!`;
+            
+            // Show profile view, hide edit form
+            document.getElementById('profileView').style.display = 'block';
+            editProfileForm.classList.remove('active');
+            
+            // Show success message
+            showSuccessMessage('Profile updated successfully!');
+        });
+
+        // Update year tabs based on current year of study
+        function updateYearTabs(currentYear) {
+            const yearTabsContainer = document.getElementById('yearTabs');
+            yearTabsContainer.innerHTML = '';
+            
+            // Add tabs for all years up to current year
+            for (let year = 1; year <= parseInt(currentYear); year++) {
+                const tab = document.createElement('div');
+                tab.className = `year-tab ${year === 1 ? 'active' : ''}`;
+                tab.setAttribute('data-year', year);
+                tab.textContent = `${getOrdinalSuffix(year)} Year`;
+                
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentYearTab = year.toString();
+                    displayGradesForYear(currentYearTab);
+                });
+                
+                yearTabsContainer.appendChild(tab);
+            }
+            
+            // Update current year tab
+            currentYearTab = '1';
+            displayGradesForYear(currentYearTab);
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            // Remove any existing success messages
+            const existingMessages = document.querySelectorAll('.success-message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            // Create success message element
+            const successElement = document.createElement('div');
+            successElement.className = 'success-message';
+            successElement.textContent = message;
+            
+            // Insert success message at the top of the current section
+            const currentActiveSection = document.querySelector('.profile-section.active, .grades-section.active');
+            if (currentActiveSection) {
+                const card = currentActiveSection.querySelector('.card');
+                card.insertBefore(successElement, card.firstChild);
+                
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    successElement.remove();
+                }, 3000);
+            }
+        }
+
+        // Handle logout
+        logoutBtn.addEventListener('click', function() {
+            // Switch to auth view
+            authSection.classList.remove('hidden');
+            portalSection.classList.add('hidden');
+            
+            // Reset login form completely
+            loginForm.reset();
+            clearLoginErrors();
+            
+            // Ensure login tab is active
+            authTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+            
+            // Reset to dashboard view
+            navItems.forEach(i => i.classList.remove('active'));
+            document.querySelector('nav li[data-section="dashboard"]').classList.add('active');
+            dashboardSection.style.display = 'block';
+            profileSection.classList.remove('active');
+            gradesSection.classList.remove('active');
+            
+            // Reset edit form
+            document.getElementById('profileView').style.display = 'block';
+            editProfileForm.classList.remove('active');
+            
+            // Clear current user
+            currentUser = null;
+        });
+
+        // Initialize on first load
+        if (studentAccounts['demo@student.edu']) {
+            displayGradesForYear('1');
+        }
+    </script>
+</body>
+</html>
